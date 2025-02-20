@@ -29,8 +29,8 @@ type UserController(
       _logger.LogError(
         "An unexpected error occurred while creating the user record.\n\t" +
         "[UserController] -> [CreateUser]:\n\t" +
-        "UserId : {user.Id}\n\t" +
-        "Handle : {user.Handle}")
+        $"UserId : {user.Id}\n\t" +
+        $"Handle : {user.Handle}.")
       return Error("Internal server error occurred.") 
   }
 
@@ -57,8 +57,8 @@ type UserController(
       _logger.LogError(
         "An unexpected error occurred while updating the user record.\n\t" +
         "[UserController] -> [UpdateUser]:\n\t" +
-        "UserId : {user.Id}\n\t" +
-        "Handle : {user.Handle}",
+        $"UserId : {user.Id}\n\t" +
+        $"Handle : {user.Handle}.",
         ex)
       return Error("Internal server error occurred.") 
   }
