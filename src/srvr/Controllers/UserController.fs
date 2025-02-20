@@ -23,7 +23,7 @@ type UserController(
   [<HttpPost>]
   member this.CreateUser user = task {
     try
-      let! _ = _userService.CreateUser user
+      TaskTools.await (_userService.CreateUser user)
       return Ok("User successfully created.")
     with ex ->
       _logger.LogError(
@@ -51,7 +51,7 @@ type UserController(
   [<HttpPost>]
   member this.UpdateUser user = task {
     try
-      let! _ = _userService.UpdateUser user
+      TaskTools.await (_userService.UpdateUser user)
       return Ok("User successfully updated.")
     with ex ->
       _logger.LogError(
