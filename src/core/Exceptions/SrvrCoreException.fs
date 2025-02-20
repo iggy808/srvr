@@ -1,2 +1,2 @@
-namespace Core.Exceptions
+namespace core.Exceptions
 exception SrvrCoreException of string

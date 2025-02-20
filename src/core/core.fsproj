@@ -13,17 +13,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="AsyncTools/TaskAwaiters.fs" />
-    <Compile Include="Exceptions/SrvrCoreException.fs" />
-    <Compile Include="Records/User.fs" />
-    <Compile Include="Repositories/IUserRepository.fs" />
-    <Compile Include="Repositories/UserRepository.fs" />
-    <Compile Include="Validation/UserService/CreateUserValidation.fs" />
-    <Compile Include="Validation/UserService/GetUserByIdValidation.fs" />
-    <Compile Include="Validation/UserService/DeleteUserByIdValidation.fs" />
-    <Compile Include="Services/UserService/UpdateUser.fs" />
-    <Compile Include="Services/UserService/IUserService.fs" />
-    <Compile Include="Services/UserService/UserService.fs" />
+    <Compile Include="exceptions/SrvrCoreException.fs" />
+    <Compile Include="records/User.fs" />
+    <Compile Include="repositories/IUserRepository.fs" />
+    <Compile Include="repositories/UserRepository.fs" />
+    <Compile Include="services/userservice/features/CreateUser.fs" />
+    <Compile Include="services/userservice/features/DeleteUserById.fs" />
+    <Compile Include="services/userservice/features/GetUserById.fs" />
+    <Compile Include="services/userservice/features/UpdateUser.fs" />
+    <Compile Include="services/userservice/IUserService.fs" />
+    <Compile Include="services/userservice/UserService.fs" />
   </ItemGroup>
 
 </Project>

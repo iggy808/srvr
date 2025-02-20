@@ -7,3 +7,4 @@ src/.DS_Store
 /src/srvr/obj
 src/srvr/datum.db
 *.swp
+*.swo

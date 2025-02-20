@@ -6,9 +6,8 @@ open System.Linq
 open System.Threading.Tasks
 open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Logging
-open Core.Services.UserService
-open Core.Records
-open Core.AsyncTools
+open core.Services.UserService
+open core.Records
 
 [<ApiController>]
 [<Route("[controller]")>]
@@ -23,8 +22,15 @@ type UserController(
   [<HttpPost>]
   member this.CreateUser user = task {
     try
-      TaskTools.await (_userService.CreateUser user)
-      return Ok("User successfully created.")
+      match CreateUser.Validation.IsRequestValid user with
+      | false ->
+          return BadRequest(
+            "CreateUser request is invalid.\n\t" +
+            $"Id : {user.Id}\n\t" +
+            $"Handle : {user.Handle}.")
+      | true ->
+          _userService.CreateUser user |> Async.AwaitTask
+          return Ok("User successfully created.")
     with ex ->
       _logger.LogError(
         "An unexpected error occurred while creating the user record.\n\t" +
@@ -37,22 +43,35 @@ type UserController(
   [<HttpGet>]
   member this.GetUser userId = task {
     try
-      let! user = _userService.GetUserById userId
-      return Ok(user)
+      match GetUserById.Validation.IsRequestValid userId with
+      | false ->
+          return BadRequest(
+            "GetUserById request is invalid.\n\t" +
+            $"UserId : {userId}"))
+      | true ->
+          let! user = _userService.GetUserById userId
+          return Ok(user)
     with ex ->
       _logger.LogError(
         "An unexpected error occurred while fetching the user record.\n\t" +
         "[UserController] -> [GetUser]:\n\t" +
         $"UserId : {userId}.",
         ex)
-      return Error()
+      return Error
   }
 
   [<HttpPost>]
   member this.UpdateUser user = task {
     try
-      TaskTools.await (_userService.UpdateUser user)
-      return Ok("User successfully updated.")
+      match UpdateUser.Validation.IsRequestValid user with
+      | false ->
+          return BadRequest(
+            "UpdateUser request is invalid.\n\t" +
+            $"Id : {user.Id}\n\t" +
+            $"Handle : {user.Handle}")
+      | true -> 
+          _userService.UpdateUser user |> Async.AwaitTask
+          return Ok("User successfully updated.")
     with ex ->
       _logger.LogError(
         "An unexpected error occurred while updating the user record.\n\t" +
@@ -66,8 +85,14 @@ type UserController(
   [<HttpDelete>]
   member this.DeleteUser userId = task {
     try
-      TaskTools.await (_userService.DeleteUserById userId)
-      return Ok("User successfully deleted.")
+      match DeleteUserById.Validation.IsRequestValid userId with
+      | false ->
+          return BadRequest(
+            "DeleteUserById request is invalid.\n\t" +
+            $"UserId : {userId}")
+      | true ->  
+          _userService.DeleteUserById userId |> Async.AwaitTask
+          return Ok("User successfully deleted.")
     with ex ->
       _logger.LogError(
         "An unexpected error occurred while deleting the user record.\n\t" +

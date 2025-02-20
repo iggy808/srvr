@@ -1,4 +1,4 @@
-namespace Core.Records
+namespace core.Records
 open System
 
 type User = {

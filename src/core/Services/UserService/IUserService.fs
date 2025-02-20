@@ -1,5 +1,5 @@
-namespace Core.Services.UserService
-open Core.Records
+namespace core.Services.UserService
+open core.Records
 open System
 open System.Threading.Tasks
 type IUserService =

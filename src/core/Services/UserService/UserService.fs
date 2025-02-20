@@ -1,7 +1,5 @@
-namespace Core.Services.UserService
-open Core.AsyncTools
-open Core.Repositories
-open Core.Validation.UserService
+namespace core.Services.UserService
+open core.Repositories
 open System.Threading.Tasks
 open Microsoft.Extensions.Logging
 
@@ -12,56 +10,33 @@ type UserService(logger : ILogger<UserService>, userRepository : IUserRepository
     interface IUserService with
 
       // User -> Task
+      // avaTODO: Research using return! here, i.e., return! _userRepo etc.
       member this.CreateUser user = task {
-        match CreateUserValidation.IsRequestValid user with
-        | false ->
-            _logger.LogInformation(
-              "CreateUser request is invalid.\n\t" +
-              $"Id : {user.Id}\n\t" +
-              $"Handle : {user.Handle}")
-        | true ->
-            TaskTools.await (_userRepository.CreateUser user) 
+        _userRepository.CreateUser user |> Async.AwaitTask
       }
 
       // Guid -> Task<Option<User>>
-      member this.GetUserById userId = task {
-        match GetUserByIdValidation.IsRequestValid userId with
-          | false ->
-              _logger.LogInformation(
-                "GetUserById request is invalid.\n\t" +
-                $"UserId : {userId}")
-              return None
-          | true ->
-              let! user = _userRepository.GetUserById userId
-              return user
+      // avaTODO: Research using return! here, i.e., return! _userRepo etc.
+      member this.GetUserById userId = task { 
+        let! user = _userRepository.GetUserById userId
+        return user
       }
 
       // User -> Task
       member this.UpdateUser userDelta = task {
-        match UpdateUser.Validation.IsRequestValid userDelta with
-          | false ->
-              _logger.LogInformation(
-                "UpdateUser request is invalid.\n\t" +
-                $"Id : {userDelta.Id}\n\t" +
-                $"Handle : {userDelta.Handle}")
-          | true ->
-              let! existingUser = _userRepository.GetUserById userDelta.Id
-              match existingUser with
-                | None ->
-                    _logger.LogInformation(
-                      $"User with Id : {userDelta.Id} not found.")
-                | Some user ->
-                   let updatedUser = UpdateUser.Logic.MapUserDeltaToExistingUser userDelta user
-                   TaskTools.await (_userRepository.UpdateUser updatedUser)
+        let! existingUser = _userRepository.GetUserById userDelta.Id
+        match existingUser with
+        | None ->
+            _logger.LogInformation(
+              $"User with Id : {userDelta.Id} not found.")
+        | Some user ->
+            let updatedUser = UpdateUser.MapUserDeltaToExistingUser userDelta user
+            // avaTODO: Research using return! here, i.e., return! _userRepo etc.
+            _userRepository.UpdateUser updatedUser |> Async.AwaitTask
       }
 
       // Guid -> Task
+      // avaTODO: Research using return! here, i.e., return! _userRepo etc.
       member this.DeleteUserById userId = task {
-        match DeleteUserByIdValidation.IsRequestValid userId with
-          | false ->
-              _logger.LogInformation(
-                "DeleteUserById request is invalid.\n\t" +
-                $"UserId : {userId}") 
-          | true ->
-              TaskTools.await (_userRepository.DeleteUserById userId)
+        _userRepository.DeleteUserById userId |> Async.AwaitTask
       }

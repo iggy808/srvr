@@ -1,10 +1,9 @@
-namespace Core.Services.UserService
+namespace core.Services.UserService.Features
 open System
-open Core.Records
+open core.Records
 
-module UpdateUser =
-
-  module Validation =
+module CreateUser =
+  module CreateUserValidation =
     let private UserIdIsNotEmpty userId = userId <> Guid.Empty
     let private HandleIsNotEmpty handle = handle <> String.Empty
     let private HandleIsNotWhitespace handle = handle |> String.forall Char.IsWhiteSpace
@@ -13,8 +12,3 @@ module UpdateUser =
       UserIdIsNotEmpty request.Id &&
       HandleIsNotEmpty request.Handle &&
       HandleIsNotWhitespace request.Handle
-
-  module Logic =
-    let MapUserDeltaToExistingUser userDelta existingUser = {existingUser with
-      Handle = userDelta.Handle
-    }
