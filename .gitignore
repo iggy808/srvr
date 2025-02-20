@@ -8,3 +8,6 @@ src/.DS_Store
 src/srvr/datum.db
 *.swp
 *.swo
+/src/api/bin
+/src/api/obj
+*.db
