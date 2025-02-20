@@ -1,0 +1,81 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/bax/Documents/repos/srvr/src/core/core.fsproj": {}
+  },
+  "projects": {
+    "/Users/bax/Documents/repos/srvr/src/core/core.fsproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/bax/Documents/repos/srvr/src/core/core.fsproj",
+        "projectName": "core",
+        "projectPath": "/Users/bax/Documents/repos/srvr/src/core/core.fsproj",
+        "packagesPath": "/Users/bax/.nuget/packages/",
+        "outputPath": "/Users/bax/Documents/repos/srvr/src/core/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/bax/Documents/repos/srvr/src/core/NuGet.Config",
+          "/Users/bax/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "/usr/local/share/dotnet/sdk/6.0.428/FSharp/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "Dapper.FSharp": {
+              "target": "Package",
+              "version": "[4.7.0, )",
+              "generatePathProperty": true
+            },
+            "FSharp.Core": {
+              "include": "Runtime, Compile, Build, Native, Analyzers, BuildTransitive",
+              "target": "Package",
+              "version": "[6.0.7, )",
+              "generatePathProperty": true
+            },
+            "Microsoft.Extensions.Logging": {
+              "target": "Package",
+              "version": "[9.0.2, )",
+              "generatePathProperty": true
+            },
+            "System.Data.SQLite": {
+              "target": "Package",
+              "version": "[1.0.119, )",
+              "generatePathProperty": true
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.428/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
