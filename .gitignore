@@ -1,0 +1,8 @@
+src/.DS_Store
+/datum
+.DS_Store
+/src/core/bin
+/src/core/obj
+/src/srvr/bin
+/src/srvr/obj
+src/srvr/datum.db

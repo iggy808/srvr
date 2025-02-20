@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Dapper.FSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="9.0.2" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="AsyncTools/TaskAwaiters.fs" />
+    <Compile Include="Exceptions/SrvrCoreException.fs" />
+    <Compile Include="Records/User.fs" />
+    <Compile Include="Repositories/IUserRepository.fs" />
+    <Compile Include="Repositories/UserRepository.fs" />
+    <Compile Include="Validation/UserService/CreateUserValidation.fs" />
+    <Compile Include="Validation/UserService/GetUserByIdValidation.fs" />
+    <Compile Include="Validation/UserService/DeleteUserByIdValidation.fs" />
+    <Compile Include="Services/UserService/UpdateUser.fs" />
+    <Compile Include="Services/UserService/IUserService.fs" />
+    <Compile Include="Services/UserService/UserService.fs" />
+  </ItemGroup>
+
+</Project>
