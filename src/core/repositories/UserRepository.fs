@@ -8,7 +8,7 @@ open System
 open System.Data
 open System.Data.SQLite
 
-type UserRepository(db : IDbConnection, logger : ILogger) = 
+type UserRepository(db : IDbConnection, logger : ILogger<UserRepository>) = 
 
     let _logger = logger
     let _db = db
@@ -20,7 +20,7 @@ type UserRepository(db : IDbConnection, logger : ILogger) =
         _logger.LogInformation(
           "User being inserted into database:\n\t" +
           $"Id: {user.Id},\n\t" +
-          $"Handle: {user.Handle}.")
+          $"Handle: {user.Handle}")
 
         insert {
           into table<User>
@@ -37,7 +37,7 @@ type UserRepository(db : IDbConnection, logger : ILogger) =
           for user in table<User> do
           where (user.Id = userId)
         } |> _db.SelectAsync<User>).Result
- 
+
         return user |> Seq.cast<User> |> Seq.toArray |> Array.tryExactlyOne
       }
 

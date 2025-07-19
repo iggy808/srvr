@@ -3,9 +3,10 @@ open System
 open core.Records
 
 module UpdateUser =
-  let MapUserDeltaToExistingUser userDelta existingUser = {existingUser with
-    Handle = userDelta.Handle
-  }
+  let MapUserDeltaToExistingUser userDelta existingUser =
+    { existingUser with
+        Handle = userDelta.Handle
+    }
 
   module Validation =
     let private UserIdIsNotEmpty userId = userId <> Guid.Empty

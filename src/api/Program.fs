@@ -2,6 +2,8 @@ namespace srvr
 #nowarn "20"
 open System
 open System.Collections.Generic
+open System.Data
+open System.Data.SQLite
 open System.IO
 open System.Linq
 open System.Threading.Tasks
@@ -13,6 +15,8 @@ open Microsoft.Extensions.Configuration
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
+open core.Services.UserService
+open core.Repositories
 
 module Program =
     let exitCode = 0
@@ -23,6 +27,14 @@ module Program =
         let builder = WebApplication.CreateBuilder(args)
 
         builder.Services.AddControllers()
+
+        builder.Services.AddScoped<IUserService, UserService>()
+        builder.Services.AddScoped<IUserRepository, UserRepository>()
+        builder.Services.AddScoped<IDbConnection>(fun _ ->
+            let connection = new SQLiteConnection("Data Source=srvrdb.db")
+            connection.Open()
+            connection :> IDbConnection
+        )
 
         let app = builder.Build()
 
