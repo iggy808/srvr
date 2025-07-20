@@ -22,9 +22,9 @@ type UserController(
 
   [<HttpPost>]
   [<Route("create")>]
-  member this.CreateUser user = task {
+  member this.CreateUser (user : User) = task {
     try
-      match CreateUser.Validation.IsRequestValid user with
+      match CreateUser.IsRequestValid user with
       | false ->
           return Results.BadRequest(
             "CreateUser request is invalid. " +
@@ -50,9 +50,9 @@ type UserController(
 
   [<HttpGet>]
   [<Route("get/{userId}")>]
-  member this.GetUser userId = task {
+  member this.GetUser (userId : int) = task {
     try
-      match GetUserById.Validation.IsRequestValid userId with
+      match GetUser.IsRequestValid userId with
       | false ->
           return Results.BadRequest(
             "GetUserById request is invalid.\n\t" +
@@ -72,11 +72,11 @@ type UserController(
       )
   }
 
-  [<HttpPost>]
+  [<HttpPut>]
   [<Route("update")>]
-  member this.UpdateUser user = task {
+  member this.UpdateUser (user : User) = task {
     try
-      match UpdateUser.Validation.IsRequestValid user with
+      match UpdateUser.IsRequestValid user with
       | false ->
           return Results.BadRequest(
             "UpdateUser request is invalid.\n\t" +
@@ -99,10 +99,10 @@ type UserController(
   }
 
   [<HttpDelete>]
-  [<Route("delete")>]
-  member this.DeleteUser userId = task {
+  [<Route("delete/{userId}")>]
+  member this.DeleteUser (userId : int) = task {
     try
-      match DeleteUserById.Validation.IsRequestValid userId with
+      match DeleteUser.IsRequestValid userId with
       | false ->
           return Results.BadRequest(
             "DeleteUserById request is invalid.\n\t" +
@@ -114,10 +114,11 @@ type UserController(
       _logger.LogError(
         "An unexpected error occurred while deleting the user record.\n\t" +
         "[UserController] -> [DeleteUser]:\n\t" +
-        $"UserId : {userId}.",
-        ex) 
+        $"UserId : {userId}." +
+        ex.Message) 
       return Results.Problem(
         title = "Internal server error occurred.",
+        detail = ex.Message,
         statusCode = 500
       )
   }

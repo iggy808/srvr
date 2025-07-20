@@ -1,9 +1,10 @@
 namespace core.Services.UserService
-open core.Records
 open System
 open System.Threading.Tasks
+open core.Records
+
 type IUserService =
   abstract member CreateUser: User -> Task
-  abstract member GetUserById: Guid -> Task<Option<User>>
+  abstract member GetUserById: int -> Task<Option<User>>
   abstract member UpdateUser: User -> Task
-  abstract member DeleteUserById: Guid -> Task 
+  abstract member DeleteUserById: int -> Task 

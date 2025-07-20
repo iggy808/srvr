@@ -13,13 +13,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="exceptions/SrvrCoreException.fs" />
     <Compile Include="records/User.fs" />
     <Compile Include="repositories/IUserRepository.fs" />
     <Compile Include="repositories/UserRepository.fs" />
     <Compile Include="services/userservice/features/CreateUser.fs" />
-    <Compile Include="services/userservice/features/DeleteUserById.fs" />
-    <Compile Include="services/userservice/features/GetUserById.fs" />
+    <Compile Include="services/userservice/features/DeleteUser.fs" />
+    <Compile Include="services/userservice/features/GetUser.fs" />
     <Compile Include="services/userservice/features/UpdateUser.fs" />
     <Compile Include="services/userservice/IUserService.fs" />
     <Compile Include="services/userservice/UserService.fs" />

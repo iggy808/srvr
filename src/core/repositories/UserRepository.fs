@@ -1,5 +1,5 @@
 namespace core.Repositories
-open core.Exceptions
+
 open core.Records
 open Dapper.FSharp.SQLite
 open Microsoft.Extensions.Logging

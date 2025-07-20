@@ -1,7 +1,9 @@
 namespace core.Services.UserService
-open core.Repositories
+
 open System.Threading.Tasks
 open Microsoft.Extensions.Logging
+open core.Records
+open core.Repositories
 
 type UserService(logger : ILogger<UserService>, userRepository : IUserRepository) =
     let _logger = logger
@@ -14,7 +16,7 @@ type UserService(logger : ILogger<UserService>, userRepository : IUserRepository
         do! _userRepository.CreateUser user
       }
 
-      // Guid -> Task<Option<User>>
+      // int -> Task<Option<User>>
       member this.GetUserById userId = task { 
         let! user = _userRepository.GetUserById userId
         return user
@@ -32,7 +34,7 @@ type UserService(logger : ILogger<UserService>, userRepository : IUserRepository
             do! _userRepository.UpdateUser updatedUser
       }
 
-      // Guid -> Task
+      // int -> Task
       member this.DeleteUserById userId = task {
         do! _userRepository.DeleteUserById userId
       }
