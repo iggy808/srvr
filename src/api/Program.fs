@@ -17,8 +17,8 @@ open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.Hosting
 open Microsoft.Extensions.Logging
 
-open core.Repositories
-open core.Services.UserService
+open core.repositories
+open core.features
 
 
 module Program =
@@ -31,13 +31,25 @@ module Program =
 
         builder.Services.AddControllers()
 
-        builder.Services.AddScoped<IUserService, UserService>()
         builder.Services.AddScoped<IUserRepository, UserRepository>()
         builder.Services.AddScoped<IDbConnection>(fun _ ->
             let connection = new SQLiteConnection("Data Source=C:\\srvr\\data\\srvr.db")
             connection.Open()
             connection :> IDbConnection
         )
+
+        builder.Services.AddScoped<User.Features>(fun serviceProvider ->            
+            // Partially apply user repository to features
+            let userRepository = serviceProvider.GetRequiredService<IUserRepository>()
+
+            {
+                User.Features.GetUser = User.getUser userRepository
+                User.Features.CreateUser = User.createUser userRepository
+                User.Features.UpdateUser = User.updateUser userRepository
+                User.Features.DeleteUser = User.deleteUser userRepository
+            }
+        )
+
 
         let app = builder.Build()
 

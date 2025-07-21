@@ -1,7 +1,9 @@
-namespace core.Repositories
+namespace core.repositories
+
 open System
-open core.Records
 open System.Threading.Tasks
+open core.records
+
 type IUserRepository =
   abstract member CreateUser: User -> Task
   abstract member GetUserById: int -> Task<Option<User>>

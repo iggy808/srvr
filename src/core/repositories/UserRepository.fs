@@ -1,12 +1,12 @@
-namespace core.Repositories
+namespace core.repositories
 
-open core.Records
-open Dapper.FSharp.SQLite
-open Microsoft.Extensions.Logging
 open System.Threading.Tasks
 open System
 open System.Data
 open System.Data.SQLite
+open Dapper.FSharp.SQLite
+open Microsoft.Extensions.Logging
+open core.records
 
 type UserRepository(db : IDbConnection, logger : ILogger<UserRepository>) = 
 

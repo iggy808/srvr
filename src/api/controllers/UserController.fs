@@ -7,118 +7,74 @@ open System.Threading.Tasks
 open Microsoft.AspNetCore.Http
 open Microsoft.AspNetCore.Mvc
 open Microsoft.Extensions.Logging
-open core.Services.UserService
-open core.Records
+
+open core.records
+open core.features
 
 [<ApiController>]
 [<Route("user")>]
-type UserController(
-  logger : ILogger<UserController>,
-  userService : IUserService) = 
+type UserController(logger : ILogger<UserController>, userFeatures : User.Features) = 
   inherit ControllerBase()
 
   let _logger = logger
-  let _userService = userService
-
-  [<HttpPost>]
-  [<Route("create")>]
-  member this.CreateUser (user : User) = task {
-    try
-      match CreateUser.IsRequestValid user with
-      | false ->
-          return Results.BadRequest(
-            "CreateUser request is invalid. " +
-            $"Id : {user.Id}, " +
-            $"Handle : {user.Handle}.")
-      | true ->
-          do! _userService.CreateUser user
-          return Results.Ok(
-            "User successfully created. " +
-            $"Id : {user.Id}, " +
-            $"Handle : {user.Handle}.")
-    with ex ->
-      _logger.LogError(
-        "An unexpected error occurred while creating the user record.\n\t" +
-        "[UserController] -> [CreateUser]:\n\t" +
-        $"UserId : {user.Id}\n\t" +
-        $"Handle : {user.Handle}.")
-      return Results.Problem(
-        title = "Internal server error occurred.",
-        statusCode = 500
-      )
-  }
+  let _userFeatures = userFeatures
 
   [<HttpGet>]
   [<Route("get/{userId}")>]
-  member this.GetUser (userId : int) = task {
+  member _.GetUser (userId : int) = task {
     try
-      match GetUser.IsRequestValid userId with
+      match User.Validation.getUserRequestIsValid userId with
       | false ->
-          return Results.BadRequest(
-            "GetUserById request is invalid.\n\t" +
-            $"UserId : {userId}")
+          return Results.BadRequest("GetUser request is invalid.")
       | true ->
-          let! user = _userService.GetUserById userId
-          return Results.Ok(user)
+          let! user = _userFeatures.GetUser userId
+          return Results.Ok(user)        
     with ex ->
-      _logger.LogError(
-        "An unexpected error occurred while fetching the user record.\n\t" +
-        "[UserController] -> [GetUser]:\n\t" +
-        $"UserId : {userId}.",
-        ex)
-      return Results.Problem(
-        title = "Internal server error occurred.",
-        statusCode = 500
-      )
+      _logger.LogError("An unexpected error occurred while fetching the user record. [UserController] -> [GetUser]", ex)
+      return Results.Problem("Internal server error occurred.", statusCode = 500)
+  }
+
+  [<HttpPost>]
+  [<Route("create")>]
+  member _.CreateUser (user : User) = task {
+    try
+      match User.Validation.createUserRequestIsValid user with
+      | false ->
+          return Results.BadRequest("CreateUser request is invalid.")
+      | true ->
+          do! _userFeatures.CreateUser user
+          return Results.Ok("User successfully created.")
+    with ex ->
+      _logger.LogError("An unexpected error occurred while creating the user record. [UserController] -> [CreateUser]", ex)
+      return Results.Problem("Internal server error occurred.", statusCode = 500)
   }
 
   [<HttpPut>]
   [<Route("update")>]
-  member this.UpdateUser (user : User) = task {
+  member _.UpdateUser (user : User) = task {
     try
-      match UpdateUser.IsRequestValid user with
+      match User.Validation.updateUserRequestIsValid user with
       | false ->
-          return Results.BadRequest(
-            "UpdateUser request is invalid.\n\t" +
-            $"Id : {user.Id}\n\t" +
-            $"Handle : {user.Handle}")
-      | true -> 
-          do! _userService.UpdateUser user
+          return Results.BadRequest("UpdateUser request is invalid.")
+      | true ->
+          do! _userFeatures.UpdateUser user
           return Results.Ok("User successfully updated.")
     with ex ->
-      _logger.LogError(
-        "An unexpected error occurred while updating the user record.\n\t" +
-        "[UserController] -> [UpdateUser]:\n\t" +
-        $"UserId : {user.Id}\n\t" +
-        $"Handle : {user.Handle}.",
-        ex)
-      return Results.Problem(
-        title = "Internal server error occurred.",
-        statusCode = 500
-      )
+      _logger.LogError("An unexpected error occurred while updating the user record. [UserController] -> [UpdateUser]", ex)
+      return Results.Problem("Internal server error occurred.", statusCode = 500)
   }
 
   [<HttpDelete>]
   [<Route("delete/{userId}")>]
-  member this.DeleteUser (userId : int) = task {
+  member _.DeleteUser (userId : int) = task {
     try
-      match DeleteUser.IsRequestValid userId with
+      match User.Validation.deleteUserRequestIsValid userId with
       | false ->
-          return Results.BadRequest(
-            "DeleteUserById request is invalid.\n\t" +
-            $"UserId : {userId}")
-      | true ->  
-          do! _userService.DeleteUserById userId
+          return Results.BadRequest("DeleteUser request is invalid.")
+      | true ->
+          do! _userFeatures.DeleteUser userId
           return Results.Ok("User successfully deleted.")
     with ex ->
-      _logger.LogError(
-        "An unexpected error occurred while deleting the user record.\n\t" +
-        "[UserController] -> [DeleteUser]:\n\t" +
-        $"UserId : {userId}." +
-        ex.Message) 
-      return Results.Problem(
-        title = "Internal server error occurred.",
-        detail = ex.Message,
-        statusCode = 500
-      )
+      _logger.LogError("An unexpected error occurred while deleting the user record. [UserController] -> [DeleteUser]", ex)
+      return Results.Problem("Internal server error occurred.", statusCode = 500)
   }
